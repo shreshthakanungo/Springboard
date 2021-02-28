@@ -24,7 +24,8 @@ def close(session_attributes, fulfillment_state, message):
         }
     }
     return response
-    
+
+""" --- Function that connects to S3 and get the data back --- """  
 def generic():
     s3=boto3.client("s3")
     filename='amazon_co-ecommerce_modified.csv'
