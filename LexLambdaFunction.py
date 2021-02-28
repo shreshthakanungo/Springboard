@@ -24,8 +24,7 @@ def close(session_attributes, fulfillment_state, message):
         }
     }
     return response
-
-""" --- Function that connects to S3 and get the data back --- """  
+    
 def generic():
     s3=boto3.client("s3")
     filename='amazon_co-ecommerce_modified.csv'
@@ -50,17 +49,15 @@ def productPrice(productName):
         return ('Product prices are {}'.format(output))
 
 
-""" --- Function that return List of product of a given Manufacturer --- """        
+""" --- Function that return List of product of a given Manufacturer --- """ 
+
 def ListOfProduct(manufacturerName):
-    dataFromS3 = generic();
+    dataFromS3 = generic()
     product_list = []
-    print('manufacturerName-------', manufacturerName)
     for row in dataFromS3:
         for column in row:    
             if column ==  manufacturerName:
-                #print('manufacturerName-------', manufactureName)
                 product_list.append(row[2])
-                print('product_list------',product_list)
     if not product_list :
         return ("There is no Product from this manufacturer")
     else:
@@ -68,6 +65,21 @@ def ListOfProduct(manufacturerName):
         # topList = sorted(product_list, key=lambda i: product_list[i], reverse=True)[:5]
         # return(topList)
         
+
+""" --- Function that return if the given product is in the stock --- """ 
+
+def availableInStock(productName):
+    dataFromS3 = generic()
+    avail_stocks=[]
+    for row in dataFromS3:
+        for column in row:
+            if column==productName:
+                avail_stocks.append(row[5])
+                #print('output---',output)
+    if not avail_stocks :
+        return ("There is no Product in the stock")
+    else:
+        return ('There are {} products'.format(avail_stocks))
 
 
 def return_ProductPrice(intent_request):
@@ -108,7 +120,28 @@ def return_ListOfProduct(intent_request):
             'contentType': 'PlainText',
             'content': 'Hello list of Products are: {}'.format(ListOfProduct(manufac_name))
         }
-    )    
+    )  
+    
+    
+def intent_AvailabilityInStock(intent_request):
+    """
+    Performs dialog management and fulfillment for returning Product’s price.
+    """
+    availableStock = intent_request['currentIntent']['slots']['product_name'] 
+    source = intent_request['invocationSource']
+    output_session_attributes = intent_request['sessionAttributes'] if intent_request['sessionAttributes'] is not None else {}
+    
+    if source == 'DialogCodeHook':
+        # Perform basic validation on the supplied input slots.
+        slots = intent_request['currentIntent']['slots']
+    return close(
+        output_session_attributes,
+        'Fulfilled',
+        {
+            'contentType': 'PlainText',
+            'content': 'Hello! : {}'.format(availableInStock(availableStock))
+        }
+    )  
     
 
 def dispatch(intent_request):
@@ -124,6 +157,10 @@ def dispatch(intent_request):
 
     elif intent_name == 'ReturnListOfProduct':
         return return_ListOfProduct(intent_request)
+    
+    elif intent_name == 'ReturnAvailabilityInStock':
+        return intent_AvailabilityInStock(intent_request)
+        
     raise Exception('Intent with name ' + intent_name + ' not supported')
 
 
