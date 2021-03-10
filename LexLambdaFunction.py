@@ -9,6 +9,8 @@ import os
 import math
 import random
 import logging
+import re
+import numpy
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -41,7 +43,7 @@ def productPrice(productName):
     for row in dataFromS3:
         for column in row:
             if column==productName:
-                output.append(row[4])
+                output.append(row[3])
                 print('output---',output)
     if not output :
         return ("There is no Product by this name")
@@ -57,11 +59,11 @@ def ListOfProduct(manufacturerName):
     for row in dataFromS3:
         for column in row:    
             if column ==  manufacturerName:
-                product_list.append(row[2])
+                product_list.append(row[1])
     if not product_list :
         return ("There is no Product from this manufacturer")
     else:
-        return (product_list)
+        return (product_list[:1])
         # topList = sorted(product_list, key=lambda i: product_list[i], reverse=True)[:5]
         # return(topList)
         
