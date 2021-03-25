@@ -10,7 +10,6 @@ import math
 import random
 import logging
 import re
-import numpy
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
