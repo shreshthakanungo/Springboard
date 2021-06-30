@@ -24,5 +24,10 @@ The basic terminology used in Amazon Lex are:
        iv. Slot - An intent can require zero or more slots or parameters. Slots can be added as a part of intent configuration. The user must provide values of all required slots before amazon lex fulfill the intent.
         v. Slot Type - Each slot has a slot type. You can create your own custom slot types or use build-in slot types. Each slot type must have a unique name within the account.
         
+ML behind the Chatbot:
+
+NLU is a branch of natural language processing, which helps computer understand and interpret human language by breaking down the elemental pieces of speech. To build machines that understand natural language, the speech is distilled into a structure ontology, using combination of rules, statistical modelling, or other techniques. Entities must be extracted, identified and resolved and semantic meaning must be derived within context, and be used for identifying intents. For eg. a simple phrase such as: "I want to know the price of the product".
+Here - need: price(intent), need: product(intent), confidence score: 0.92
+
     
     
